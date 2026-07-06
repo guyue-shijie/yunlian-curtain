@@ -18,10 +18,11 @@ let activeTab = "business";
 let isDirty = false;
 
 function setStatus(message, type = "normal") {
-  const node = $("#saveStatus");
-  if (!node) return;
-  node.textContent = message || "";
-  node.classList.toggle("error", type === "error");
+  [$("#saveStatus"), $("#footerSaveStatus")].forEach((node) => {
+    if (!node) return;
+    node.textContent = message || "";
+    node.classList.toggle("error", type === "error");
+  });
 }
 
 function setLoginStatus(message, type = "normal") {
