@@ -1,26 +1,44 @@
 import { error } from "./responses.js";
 
 const COOKIE_NAME = "curtain_admin_session";
-const encoder = new TextEncoder();
 
-function base64Url(bytesOrText) {
-  const bytes = typeof bytesOrText === "string" ? encoder.encode(bytesOrText) : bytesOrText;
-  let binary = "";
-  for (const byte of bytes) binary += String.fromCharCode(byte);
-  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+function utf8Bytes(text) {
+  const value = String(text || "");
+  const bytes = [];
+  for (let i = 0; i < value.length; i += 1) {
+    let code = value.charCodeAt(i);
+    if (code >= 0xd800 && code <= 0xdbff && i + 1 < value.length) {
+      const next = value.charCodeAt(i + 1);
+      if (next >= 0xdc00 && next <= 0xdfff) {
+        code = 0x10000 + ((code - 0xd800) << 10) + (next - 0xdc00);
+        i += 1;
+      }
+    }
+    if (code < 0x80) {
+      bytes.push(code);
+    } else if (code < 0x800) {
+      bytes.push(0xc0 | (code >> 6), 0x80 | (code & 0x3f));
+    } else if (code < 0x10000) {
+      bytes.push(0xe0 | (code >> 12), 0x80 | ((code >> 6) & 0x3f), 0x80 | (code & 0x3f));
+    } else {
+      bytes.push(
+        0xf0 | (code >> 18),
+        0x80 | ((code >> 12) & 0x3f),
+        0x80 | ((code >> 6) & 0x3f),
+        0x80 | (code & 0x3f),
+      );
+    }
+  }
+  return new Uint8Array(bytes);
 }
 
-function fromBase64Url(text) {
-  const padded = text.replace(/-/g, "+").replace(/_/g, "/").padEnd(Math.ceil(text.length / 4) * 4, "=");
-  const binary = atob(padded);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
-  return bytes;
+function hex(bytes) {
+  return [...new Uint8Array(bytes)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
 async function sha256Hex(text) {
-  const hash = await crypto.subtle.digest("SHA-256", encoder.encode(text));
-  return [...new Uint8Array(hash)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
+  const hash = await crypto.subtle.digest("SHA-256", utf8Bytes(text));
+  return hex(hash);
 }
 
 function constantEqual(a, b) {
@@ -33,13 +51,13 @@ function constantEqual(a, b) {
 async function hmac(data, secret) {
   const key = await crypto.subtle.importKey(
     "raw",
-    encoder.encode(secret),
+    utf8Bytes(secret),
     { name: "HMAC", hash: "SHA-256" },
     false,
     ["sign", "verify"],
   );
-  const signature = await crypto.subtle.sign("HMAC", key, encoder.encode(data));
-  return base64Url(new Uint8Array(signature));
+  const signature = await crypto.subtle.sign("HMAC", key, utf8Bytes(data));
+  return hex(signature);
 }
 
 function parseCookies(request) {
@@ -72,10 +90,7 @@ export async function createSessionCookie(env) {
   if (!secret || secret.length < 24) {
     return { ok: false, message: "SESSION_SECRET 还没有配置，至少 24 个字符。" };
   }
-  const payload = {
-    exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
-  };
-  const body = base64Url(JSON.stringify(payload));
+  const body = String(Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7);
   const signature = await hmac(body, secret);
   return {
     ok: true,
@@ -93,12 +108,9 @@ export async function requireAdmin({ request, env }) {
   if (!body || !signature) return error("登录状态无效。", 401);
   const expected = await hmac(body, secret);
   if (!constantEqual(signature, expected)) return error("登录状态无效。", 401);
-  try {
-    const payload = JSON.parse(new TextDecoder().decode(fromBase64Url(body)));
-    if (!payload.exp || payload.exp < Math.floor(Date.now() / 1000)) return error("登录已过期。", 401);
-  } catch {
-    return error("登录状态无效。", 401);
-  }
+  const expiresAt = Number(body);
+  if (!Number.isFinite(expiresAt)) return error("登录状态无效。", 401);
+  if (expiresAt < Math.floor(Date.now() / 1000)) return error("登录已过期。", 401);
   return null;
 }
 
