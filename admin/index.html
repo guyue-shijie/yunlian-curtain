@@ -292,6 +292,24 @@
       height: 18px;
     }
 
+    .upload-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .upload-row input {
+      padding: 8px;
+      background: #fff;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
     .form-footer {
       position: sticky;
       bottom: 0;

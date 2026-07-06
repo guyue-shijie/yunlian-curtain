@@ -62,6 +62,25 @@ async function api(path, options = {}) {
   return payload;
 }
 
+async function uploadMedia(file) {
+  const form = new FormData();
+  form.append("file", file);
+  const response = await fetch("/api/admin/upload", {
+    method: "POST",
+    credentials: "same-origin",
+    headers: { accept: "application/json" },
+    body: form,
+  });
+  const payload = await response.json().catch(() => ({ ok: false, error: "上传接口返回格式不正确。" }));
+  if (!response.ok || !payload.ok) {
+    const error = new Error(payload.error || "上传失败。");
+    error.status = response.status;
+    error.payload = payload;
+    throw error;
+  }
+  return payload.file;
+}
+
 function showLogin() {
   $("#loginView").classList.remove("hidden");
   $("#appView").classList.add("hidden");
@@ -108,6 +127,39 @@ function checkbox(parent, label, checked, onChange) {
     markDirty();
   });
   wrap.append(input, document.createTextNode(label));
+  parent.appendChild(wrap);
+}
+
+function uploadField(parent, label, accept, onUploaded) {
+  const wrap = element("div", "field full");
+  const id = `upload_${Math.random().toString(36).slice(2)}`;
+  const labelNode = element("label", "", label);
+  labelNode.htmlFor = id;
+  const row = element("div", "upload-row");
+  const input = document.createElement("input");
+  input.id = id;
+  input.type = "file";
+  input.accept = accept;
+  const hint = element("div", "hint", "上传成功后会自动填入地址，最后仍需点击保存发布。");
+  input.addEventListener("change", async () => {
+    const file = input.files && input.files[0];
+    if (!file) return;
+    setBusy(true);
+    setStatus(`正在上传：${file.name}`);
+    try {
+      const result = await uploadMedia(file);
+      onUploaded(result.url);
+      markDirty();
+      renderEditor();
+      setStatus("上传成功，已填入地址。记得保存发布。");
+    } catch (error) {
+      setStatus(error.message, "error");
+    } finally {
+      setBusy(false);
+    }
+  });
+  row.appendChild(input);
+  wrap.append(labelNode, row, hint);
   parent.appendChild(wrap);
 }
 
@@ -245,9 +297,15 @@ function renderCases(fields) {
         full: true,
         placeholder: "https://... 或 data:image/...",
       });
+      uploadField(grid, "上传案例图片", "image/jpeg,image/png,image/webp,image/gif", (url) => {
+        item.image = url;
+      });
       field(grid, "案例视频地址", item.video || "", (value) => (item.video = value), {
         full: true,
         placeholder: "mp4/webm 直链，或抖音/视频号/小红书案例链接",
+      });
+      uploadField(grid, "上传案例视频", "video/mp4,video/webm,video/ogg,video/quicktime", (url) => {
+        item.video = url;
       });
     },
   );
