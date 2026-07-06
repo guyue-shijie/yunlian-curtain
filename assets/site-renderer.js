@@ -152,7 +152,6 @@
           const video = document.createElement("video");
           video.src = item.video;
           video.controls = true;
-          video.setAttribute("controlsList", "nofullscreen nodownload");
           video.preload = "metadata";
           video.playsInline = true;
           card.appendChild(video);
