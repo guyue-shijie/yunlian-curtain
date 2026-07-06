@@ -1,0 +1,941 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>云帘软装｜窗帘定制与免费上门量尺</title>
+  <meta name="description" content="云帘软装提供本地窗帘定制、轨道安装、全屋软装搭配，支持免费上门量尺、看样布、预约报价。" />
+  <link rel="canonical" href="https://www.example.com/" />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="zh_CN" />
+  <meta property="og:title" content="云帘软装｜窗帘定制与免费上门量尺" />
+  <meta property="og:description" content="本地窗帘定制、轨道安装、全屋软装搭配，支持免费上门量尺、看样布、预约报价。" />
+  <meta property="og:url" content="https://www.example.com/" />
+  <meta property="og:image" content="https://www.example.com/assets/curtain-hero.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="云帘软装｜窗帘定制与免费上门量尺" />
+  <meta name="twitter:description" content="本地窗帘定制、轨道安装、全屋软装搭配，支持免费上门量尺、看样布、预约报价。" />
+  <meta name="twitter:image" content="https://www.example.com/assets/curtain-hero.png" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HomeAndConstructionBusiness",
+      "name": "云帘软装",
+      "url": "https://www.example.com/",
+      "telephone": "+86-138-0000-0000",
+      "image": "https://www.example.com/assets/curtain-hero.png",
+      "description": "本地窗帘定制、轨道安装、全屋软装搭配，支持免费上门量尺、看样布、预约报价。",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "请替换为真实门店地址",
+        "addressLocality": "请替换城市",
+        "addressCountry": "CN"
+      },
+      "openingHours": "Mo-Su 09:00-20:00",
+      "areaServed": "同城上门"
+    }
+  </script>
+  <style>
+    :root {
+      --ink: #1f2a24;
+      --muted: #657169;
+      --paper: #f8f5ef;
+      --surface: #ffffff;
+      --line: #e5ded1;
+      --green: #2f6b4f;
+      --green-dark: #194a35;
+      --gold: #bd8a3f;
+      --rose: #b9635f;
+      --shadow: 0 18px 50px rgba(33, 42, 35, .12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px clamp(18px, 5vw, 56px);
+      border-bottom: 1px solid rgba(229, 222, 209, .9);
+      background: rgba(248, 245, 239, .92);
+      backdrop-filter: blur(16px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      flex: 0 0 36px;
+      border-radius: 8px;
+      color: #fff;
+      background: var(--green);
+      font-weight: 900;
+    }
+
+    .brand span:last-child {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .button {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.2;
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    .button.primary {
+      color: #fff;
+      background: var(--green);
+      box-shadow: 0 12px 24px rgba(47, 107, 79, .22);
+    }
+
+    .button.secondary {
+      color: var(--green-dark);
+      border-color: var(--line);
+      background: #fff;
+    }
+
+    .hero {
+      position: relative;
+      min-height: min(760px, calc(100vh - 68px));
+      overflow: hidden;
+      isolation: isolate;
+      background: #1c261f;
+    }
+
+    .hero::after {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      content: "";
+      background:
+        linear-gradient(90deg, rgba(14, 24, 18, .86) 0%, rgba(14, 24, 18, .66) 38%, rgba(14, 24, 18, .14) 100%),
+        linear-gradient(0deg, rgba(14, 24, 18, .55), rgba(14, 24, 18, 0) 42%);
+    }
+
+    .hero-image {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .hero-inner {
+      display: grid;
+      min-height: inherit;
+      align-items: end;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: clamp(72px, 10vw, 116px) clamp(20px, 5vw, 48px) 54px;
+    }
+
+    .hero-copy {
+      max-width: 620px;
+      color: #fff;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      color: #ffe2a9;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .eyebrow::before {
+      width: 28px;
+      height: 2px;
+      content: "";
+      background: #ffe2a9;
+    }
+
+    h1 {
+      max-width: 12em;
+      margin: 0;
+      font-size: clamp(38px, 7vw, 76px);
+      line-height: 1.04;
+      letter-spacing: 0;
+    }
+
+    h1 .line {
+      display: block;
+      white-space: nowrap;
+    }
+
+    .hero-subtitle {
+      max-width: 38em;
+      margin: 18px 0 0;
+      color: rgba(255, 255, 255, .86);
+      font-size: clamp(17px, 2.4vw, 22px);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .hero-actions .secondary {
+      color: #fff;
+      border-color: rgba(255, 255, 255, .3);
+      background: rgba(255, 255, 255, .08);
+    }
+
+    .hero-proof {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      max-width: 720px;
+      margin-top: 42px;
+      color: #fff;
+    }
+
+    .proof-item {
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .09);
+      backdrop-filter: blur(10px);
+    }
+
+    .proof-item strong {
+      display: block;
+      font-size: 22px;
+      line-height: 1.1;
+    }
+
+    .proof-item span {
+      color: rgba(255, 255, 255, .76);
+      font-size: 13px;
+    }
+
+    main {
+      overflow: hidden;
+    }
+
+    .section {
+      padding: clamp(54px, 8vw, 88px) clamp(20px, 5vw, 48px);
+    }
+
+    .section.alt {
+      background: #fff;
+    }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 28px;
+      margin-bottom: 28px;
+    }
+
+    .section h2 {
+      max-width: 12em;
+      margin: 0;
+      font-size: clamp(28px, 4.5vw, 44px);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      max-width: 28em;
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .service {
+      min-height: 210px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      box-shadow: 0 10px 30px rgba(33, 42, 35, .05);
+    }
+
+    .icon {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      margin-bottom: 20px;
+      place-items: center;
+      border-radius: 8px;
+      color: var(--green-dark);
+      background: #eaf2ec;
+      font-size: 21px;
+      font-weight: 900;
+    }
+
+    .service h3,
+    .price h3,
+    .step h3 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      line-height: 1.25;
+    }
+
+    .service p,
+    .price p,
+    .step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: 1.25fr .9fr .9fr;
+      grid-auto-rows: 180px;
+      gap: 14px;
+    }
+
+    .case {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      background: #d7d0c4;
+      box-shadow: var(--shadow);
+    }
+
+    .case.large {
+      grid-row: span 2;
+    }
+
+    .case::before {
+      position: absolute;
+      inset: 0;
+      content: "";
+      background:
+        linear-gradient(145deg, rgba(47, 107, 79, .18), rgba(189, 138, 63, .18)),
+        repeating-linear-gradient(90deg, rgba(255,255,255,.36) 0 18px, rgba(255,255,255,.12) 18px 36px);
+    }
+
+    .case::after {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 14px;
+      z-index: 1;
+      padding: 9px 11px;
+      border-radius: 8px;
+      color: #fff;
+      background: rgba(31, 42, 36, .78);
+      font-size: 14px;
+      font-weight: 800;
+      content: attr(data-title);
+    }
+
+    .case:nth-child(2)::before {
+      background:
+        linear-gradient(145deg, rgba(185, 99, 95, .18), rgba(255, 255, 255, .15)),
+        repeating-linear-gradient(90deg, rgba(244,238,229,.92) 0 22px, rgba(209,196,176,.72) 22px 44px);
+    }
+
+    .case:nth-child(3)::before {
+      background:
+        linear-gradient(145deg, rgba(29, 74, 53, .2), rgba(189, 138, 63, .14)),
+        repeating-linear-gradient(90deg, rgba(220,230,216,.92) 0 16px, rgba(164,184,154,.54) 16px 32px);
+    }
+
+    .case:nth-child(4)::before {
+      background:
+        linear-gradient(145deg, rgba(31, 42, 36, .12), rgba(255, 255, 255, .18)),
+        repeating-linear-gradient(90deg, rgba(245,245,240,.94) 0 14px, rgba(210,213,203,.58) 14px 28px);
+    }
+
+    .case:nth-child(5)::before {
+      background:
+        linear-gradient(145deg, rgba(189, 138, 63, .22), rgba(47, 107, 79, .12)),
+        repeating-linear-gradient(90deg, rgba(238,225,205,.95) 0 20px, rgba(201,172,129,.6) 20px 40px);
+    }
+
+    .price-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .price {
+      position: relative;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 10px 30px rgba(33, 42, 35, .05);
+    }
+
+    .price.featured {
+      border-color: rgba(47, 107, 79, .38);
+      box-shadow: var(--shadow);
+    }
+
+    .tag {
+      display: inline-flex;
+      margin-bottom: 14px;
+      padding: 5px 9px;
+      border-radius: 8px;
+      color: var(--green-dark);
+      background: #eaf2ec;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .money {
+      margin: 18px 0 12px;
+      color: var(--green-dark);
+      font-size: 34px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .money small {
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .price ul {
+      display: grid;
+      gap: 8px;
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .price li::before {
+      margin-right: 8px;
+      color: var(--green);
+      content: "✓";
+      font-weight: 900;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      counter-reset: step;
+    }
+
+    .step {
+      position: relative;
+      min-height: 180px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+    }
+
+    .step::before {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      margin-bottom: 18px;
+      place-items: center;
+      border-radius: 8px;
+      color: #fff;
+      background: var(--green);
+      content: counter(step);
+      counter-increment: step;
+      font-weight: 900;
+    }
+
+    .cta {
+      color: #fff;
+      background: var(--green-dark);
+    }
+
+    .cta-panel {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 30px;
+      align-items: center;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .cta h2 {
+      max-width: 12em;
+      margin: 0;
+      font-size: clamp(30px, 5vw, 52px);
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .cta p {
+      max-width: 32em;
+      margin: 16px 0 0;
+      color: rgba(255, 255, 255, .78);
+    }
+
+    .lead-box {
+      padding: 24px;
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .08);
+    }
+
+    .lead-box label {
+      display: block;
+      margin: 0 0 6px;
+      color: rgba(255, 255, 255, .72);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .lead-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .input-like {
+      min-height: 44px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-radius: 8px;
+      color: #fff;
+      background: rgba(255, 255, 255, .1);
+      font-weight: 800;
+    }
+
+    .qr {
+      display: grid;
+      width: 128px;
+      height: 128px;
+      margin-top: 16px;
+      place-items: center;
+      border: 8px solid #fff;
+      border-radius: 8px;
+      color: var(--green-dark);
+      background:
+        linear-gradient(90deg, #1f2a24 10px, transparent 10px 18px, #1f2a24 18px 28px, transparent 28px),
+        linear-gradient(#1f2a24 10px, transparent 10px 18px, #1f2a24 18px 28px, transparent 28px),
+        #fff;
+      background-size: 38px 38px;
+      font-size: 13px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .sticky-contact {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 30;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid rgba(229, 222, 209, .85);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, .94);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .sticky-contact .button {
+      min-height: 40px;
+      padding: 9px 13px;
+      font-size: 14px;
+    }
+
+    footer {
+      padding: 24px clamp(20px, 5vw, 48px) 92px;
+      color: var(--muted);
+      background: #fff;
+      font-size: 14px;
+    }
+
+    footer .wrap {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+    }
+
+    @media (max-width: 900px) {
+      .top-actions .secondary {
+        display: none;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .hero-inner {
+        padding-top: 96px;
+      }
+
+      .hero-proof,
+      .service-grid,
+      .price-grid,
+      .steps,
+      .cta-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        display: block;
+      }
+
+      .section-head p {
+        margin-top: 12px;
+      }
+
+      .gallery {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .case.large {
+        grid-column: span 2;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .topbar {
+        padding: 10px 14px;
+      }
+
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+        flex-basis: 34px;
+      }
+
+      .button {
+        min-height: 40px;
+        padding: 9px 12px;
+        font-size: 14px;
+      }
+
+      .hero-inner {
+        padding: 82px 18px 34px;
+      }
+
+      h1 {
+        max-width: 100%;
+        font-size: clamp(34px, 10.2vw, 38px);
+      }
+
+      .hero-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .hero-proof {
+        margin-top: 28px;
+      }
+
+      .section {
+        padding: 46px 18px;
+      }
+
+      .service {
+        min-height: auto;
+      }
+
+      .gallery {
+        grid-template-columns: 1fr;
+        grid-auto-rows: 170px;
+      }
+
+      .case.large {
+        grid-column: auto;
+        grid-row: auto;
+      }
+
+      .lead-row {
+        grid-template-columns: 1fr;
+      }
+
+      .sticky-contact {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        justify-content: space-between;
+      }
+
+      .sticky-contact .button {
+        flex: 1;
+      }
+
+      footer .wrap {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="返回首页">
+      <span class="brand-mark">帘</span>
+      <span>云帘软装</span>
+    </a>
+    <nav class="top-actions" aria-label="快速联系">
+      <a class="button secondary" href="#cases">看安装案例</a>
+      <a class="button primary" href="tel:13800000000">电话咨询</a>
+    </nav>
+  </header>
+
+  <section class="hero" id="top">
+    <img class="hero-image" src="assets/curtain-hero.png" alt="现代客厅窗帘定制效果" />
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <div class="eyebrow">本地窗帘定制与上门安装</div>
+        <h1><span class="line">免费量尺，</span><span class="line">给你家配一套</span><span class="line">耐看的窗帘。</span></h1>
+        <p class="hero-subtitle">卧室遮光、客厅纱帘、阳台轨道、全屋软装搭配，一次上门看样布、量尺寸、出报价。</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#reserve">预约免费量尺</a>
+          <a class="button secondary" href="#prices">先看价格参考</a>
+        </div>
+        <div class="hero-proof" aria-label="服务优势">
+          <div class="proof-item"><strong>2小时</strong><span>同城快速响应</span></div>
+          <div class="proof-item"><strong>300+</strong><span>本地安装案例</span></div>
+          <div class="proof-item"><strong>1年</strong><span>轨道安装售后</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <section class="section alt">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>客户进来后，先让他知道你能解决什么。</h2>
+          <p>这页是给窗帘店获客用的，不是普通官网。重点是让客户看到案例、价格范围和联系方式，尽快预约上门量尺。</p>
+        </div>
+        <div class="service-grid">
+          <article class="service">
+            <div class="icon">布</div>
+            <h3>窗帘定制</h3>
+            <p>卧室、客厅、儿童房、阳台，按尺寸和遮光需求推荐布料。</p>
+          </article>
+          <article class="service">
+            <div class="icon">轨</div>
+            <h3>轨道安装</h3>
+            <p>直轨、弯轨、罗马杆、智能电动轨道，上门测量后安装。</p>
+          </article>
+          <article class="service">
+            <div class="icon">搭</div>
+            <h3>软装搭配</h3>
+            <p>根据墙面、地板、家具颜色，搭配布帘、纱帘和挂法。</p>
+          </article>
+          <article class="service">
+            <div class="icon">售</div>
+            <h3>售后调整</h3>
+            <p>安装后如需小范围调整，按约定提供本地售后服务。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="cases">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>真实案例比长篇介绍更容易成交。</h2>
+          <p>正式上线时，把这里换成老板真实安装图。每张图都写清楚房间、面料和大概预算。</p>
+        </div>
+        <div class="gallery">
+          <div class="case large" data-title="客厅｜布帘+纱帘｜温柔奶咖色"></div>
+          <div class="case" data-title="卧室｜高遮光｜安静灰绿"></div>
+          <div class="case" data-title="阳台｜弯轨安装｜清爽白纱"></div>
+          <div class="case" data-title="儿童房｜柔和色系｜易打理"></div>
+          <div class="case" data-title="全屋｜统一配色｜上门报价"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="prices">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>价格给范围，不把客户吓跑。</h2>
+          <p>窗帘按尺寸、面料、轨道和安装方式计价。页面先给参考价，具体报价通过量尺后确认。</p>
+        </div>
+        <div class="price-grid">
+          <article class="price">
+            <span class="tag">卧室常用</span>
+            <h3>遮光窗帘</h3>
+            <p>适合主卧、次卧、儿童房，兼顾遮光和隐私。</p>
+            <div class="money">399元起 <small>/ 窗</small></div>
+            <ul>
+              <li>可选遮光率</li>
+              <li>支持布帘+纱帘</li>
+              <li>上门看样布</li>
+            </ul>
+          </article>
+          <article class="price featured">
+            <span class="tag">咨询最多</span>
+            <h3>客厅窗帘</h3>
+            <p>适合大窗、落地窗、阳台连客厅，重视整体效果。</p>
+            <div class="money">699元起 <small>/ 套</small></div>
+            <ul>
+              <li>客厅配色建议</li>
+              <li>轨道/罗马杆可选</li>
+              <li>预约上门量尺</li>
+            </ul>
+          </article>
+          <article class="price">
+            <span class="tag">新房推荐</span>
+            <h3>全屋定制</h3>
+            <p>适合新房装修、旧房翻新，一次完成全屋搭配。</p>
+            <div class="money">到店报价 <small>/ 量尺后</small></div>
+            <ul>
+              <li>全屋统一方案</li>
+              <li>多空间一起核价</li>
+              <li>安装后售后调整</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>把咨询变成预约量尺。</h2>
+          <p>客户不需要复杂流程，只要知道下一步怎么做。这个流程适合放在页面中段和销售话术里。</p>
+        </div>
+        <div class="steps">
+          <article class="step">
+            <h3>加微信发户型</h3>
+            <p>客户拍窗户和装修风格，先判断大概方案。</p>
+          </article>
+          <article class="step">
+            <h3>预约上门量尺</h3>
+            <p>确认小区、时间、窗口数量，上门带样布。</p>
+          </article>
+          <article class="step">
+            <h3>现场选布报价</h3>
+            <p>根据尺寸、遮光、轨道和安装方式核价。</p>
+          </article>
+          <article class="step">
+            <h3>制作安装售后</h3>
+            <p>确认订单后制作，预约安装，后续可调整。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section cta" id="reserve">
+      <div class="cta-panel">
+        <div>
+          <h2>今天预约，先给你看样布和预算。</h2>
+          <p>替换成真实店铺后，这里放老板微信、门店地址和联系电话。客户从抖音、朋友圈、业主群点进来后，能直接联系。</p>
+          <div class="hero-actions">
+            <a class="button primary" href="tel:13800000000">拨打 138-0000-0000</a>
+            <a class="button secondary" href="https://uri.amap.com/marker?position=116.397428,39.90923&name=云帘软装" target="_blank" rel="noreferrer">打开门店导航</a>
+          </div>
+        </div>
+        <div class="lead-box" aria-label="联系信息">
+          <label>微信咨询</label>
+          <div class="input-like">微信号：yunlian-curtain</div>
+          <div class="lead-row">
+            <div>
+              <label>营业时间</label>
+              <div class="input-like">09:00 - 20:00</div>
+            </div>
+            <div>
+              <label>服务范围</label>
+              <div class="input-like">同城上门</div>
+            </div>
+          </div>
+          <div class="qr">替换为<br />微信二维码</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <aside class="sticky-contact" aria-label="底部快速预约">
+    <a class="button secondary" href="#cases">案例</a>
+    <a class="button primary" href="#reserve">预约量尺</a>
+  </aside>
+
+  <footer>
+    <div class="wrap">
+      <span>© 2026 云帘软装。本页面为窗帘店获客样板，可替换真实店铺资料。</span>
+      <span>地址：请替换为真实门店地址</span>
+    </div>
+  </footer>
+</body>
+</html>
