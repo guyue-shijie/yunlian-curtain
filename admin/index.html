@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>网站后台 | 云帘软装</title>
+  <style>
+    :root {
+      --bg: #f4f4f1;
+      --panel: #fff;
+      --text: #17231d;
+      --muted: #66736c;
+      --line: #d9ded8;
+      --accent: #2f7656;
+      --accent-dark: #21563e;
+      --danger: #b43d32;
+      --shadow: 0 18px 46px rgba(31, 42, 36, .12);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .shell {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 22px 56px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .title h1 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: 0;
+    }
+
+    .title p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      min-height: 40px;
+      padding: 9px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: #fff;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-weight: 700;
+    }
+
+    .button.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .button.primary:hover {
+      background: var(--accent-dark);
+    }
+
+    .button.danger {
+      color: var(--danger);
+      border-color: rgba(180, 61, 50, .35);
+    }
+
+    .button:disabled {
+      opacity: .55;
+      cursor: wait;
+    }
+
+    .login {
+      max-width: 420px;
+      margin: 11vh auto 0;
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .login h1 {
+      margin: 0 0 8px;
+      font-size: 24px;
+    }
+
+    .login p {
+      margin: 0 0 20px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .72);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      backdrop-filter: blur(12px);
+    }
+
+    .tab {
+      white-space: nowrap;
+      min-height: 38px;
+      padding: 8px 12px;
+      border-radius: 7px;
+      color: var(--muted);
+      background: transparent;
+      font-weight: 800;
+    }
+
+    .tab.active {
+      color: #fff;
+      background: var(--accent);
+    }
+
+    .status {
+      min-height: 34px;
+      margin: 14px 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .status.error {
+      color: var(--danger);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    .panel {
+      display: none;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: 0 10px 28px rgba(31, 42, 36, .06);
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    .panel-head {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-head h2 {
+      margin: 0;
+      font-size: 19px;
+    }
+
+    .panel-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .fields {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      color: #26342d;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid #cfd7d1;
+      border-radius: 8px;
+      padding: 10px 11px;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 92px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(47, 118, 86, .12);
+    }
+
+    .array {
+      grid-column: 1 / -1;
+      display: grid;
+      gap: 14px;
+    }
+
+    .item {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fbfbf9;
+    }
+
+    .item-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 43px;
+    }
+
+    .check-row input {
+      width: 18px;
+      height: 18px;
+    }
+
+    .form-footer {
+      position: sticky;
+      bottom: 0;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 18px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .86);
+      backdrop-filter: blur(12px);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 760px) {
+      .shell {
+        padding: 18px 14px 44px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .fields,
+      .mini-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-footer {
+        justify-content: stretch;
+      }
+
+      .form-footer .button {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="login" id="loginView">
+      <h1>网站后台</h1>
+      <p>登录后可以修改门店电话、地址、案例、价格和页面文案。</p>
+      <form id="loginForm">
+        <div class="field">
+          <label for="password">后台密码</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required />
+        </div>
+        <div class="status" id="loginStatus"></div>
+        <button class="button primary" type="submit">登录</button>
+      </form>
+    </section>
+
+    <section class="hidden" id="appView">
+      <header class="topbar">
+        <div class="title">
+          <h1>网站后台</h1>
+          <p id="updatedAt">正在读取内容</p>
+        </div>
+        <div class="actions">
+          <a class="button" href="/" target="_blank" rel="noreferrer">打开前台</a>
+          <button class="button danger" id="logoutButton" type="button">退出</button>
+        </div>
+      </header>
+
+      <nav class="tabs" id="tabs" aria-label="编辑栏目"></nav>
+      <div class="status" id="saveStatus"></div>
+      <form id="editorForm">
+        <div class="layout" id="panels"></div>
+        <div class="form-footer">
+          <button class="button" id="reloadButton" type="button">重新读取</button>
+          <button class="button primary" id="saveButton" type="submit">保存发布</button>
+        </div>
+      </form>
+    </section>
+  </main>
+  <script src="admin.js" defer></script>
+</body>
+</html>

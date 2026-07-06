@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /api/admin/
 
 Sitemap: https://yunlian-curtain.pages.dev/sitemap.xml

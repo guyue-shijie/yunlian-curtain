@@ -744,6 +744,12 @@
         display: block;
       }
     }
+
+    .case.has-image::before {
+      background:
+        linear-gradient(0deg, rgba(22, 32, 27, 0.2), rgba(22, 32, 27, 0.2)),
+        var(--case-image) center / cover no-repeat;
+    }
   </style>
 </head>
 <body>
@@ -937,5 +943,6 @@
       <span>地址：请替换为真实门店地址</span>
     </div>
   </footer>
+  <script src="assets/site-renderer.js" defer></script>
 </body>
 </html>
