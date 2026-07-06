@@ -7,7 +7,7 @@ const tabs = [
   { id: "hero", title: "首屏", note: "客户打开页面后第一眼看到的内容。" },
   { id: "proof", title: "背书", note: "首屏下方的三个信任点。" },
   { id: "services", title: "服务", note: "窗帘定制、轨道安装、软装搭配等服务项。" },
-  { id: "cases", title: "案例", note: "真实安装案例，建议后续换成真实图片链接。" },
+  { id: "cases", title: "案例", note: "真实安装案例，可添加图片、mp4 直链或短视频页面链接。" },
   { id: "prices", title: "价格", note: "参考套餐和价格范围。" },
   { id: "steps", title: "流程", note: "客户从咨询到安装的步骤。" },
   { id: "content", title: "文案", note: "各栏目标题、说明和底部转化文案。" },
@@ -238,12 +238,16 @@ function renderCases(fields) {
     fields,
     "案例",
     siteData.cases,
-    () => ({ title: "新案例", image: "" }),
+    () => ({ title: "新案例", image: "", video: "" }),
     (grid, item) => {
       field(grid, "案例标题", item.title, (value) => (item.title = value), { full: true });
       field(grid, "案例图片地址", item.image, (value) => (item.image = value), {
         full: true,
         placeholder: "https://... 或 data:image/...",
+      });
+      field(grid, "案例视频地址", item.video || "", (value) => (item.video = value), {
+        full: true,
+        placeholder: "mp4/webm 直链，或抖音/视频号/小红书案例链接",
       });
     },
   );

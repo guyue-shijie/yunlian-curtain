@@ -22,6 +22,10 @@
     if (node && value) node.setAttribute(attr, value);
   }
 
+  function isDirectVideo(url) {
+    return /\.(mp4|webm|ogg)(\?.*)?$/i.test(String(url || ""));
+  }
+
   function normalizedSiteUrl(value) {
     if (!value) return window.location.origin + "/";
     try {
@@ -141,6 +145,23 @@
       if (item.image) {
         card.classList.add("has-image");
         card.style.setProperty("--case-image", `url("${String(item.image).replaceAll('"', "%22")}")`);
+      }
+      if (item.video) {
+        card.classList.add("has-video");
+        if (isDirectVideo(item.video)) {
+          const video = document.createElement("video");
+          video.src = item.video;
+          video.controls = true;
+          video.preload = "metadata";
+          video.playsInline = true;
+          card.appendChild(video);
+        } else {
+          const link = textEl("a", "case-video-link", "查看视频");
+          link.href = item.video;
+          link.target = "_blank";
+          link.rel = "noreferrer";
+          card.appendChild(link);
+        }
       }
       gallery.appendChild(card);
     });

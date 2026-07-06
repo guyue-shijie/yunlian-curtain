@@ -36,11 +36,11 @@ export const defaultSiteData = {
     { icon: "售", title: "售后调整", description: "安装后如需小范围调整，按约定提供本地售后服务。" },
   ],
   cases: [
-    { title: "客厅｜布帘+纱帘｜温柔奶咖色", image: "" },
-    { title: "卧室｜高遮光｜安静灰绿", image: "" },
-    { title: "阳台｜弯轨安装｜清爽白纱", image: "" },
-    { title: "儿童房｜柔和色系｜易打理", image: "" },
-    { title: "全屋｜统一配色｜上门报价", image: "" },
+    { title: "客厅｜布帘+纱帘｜温柔奶咖色", image: "", video: "" },
+    { title: "卧室｜高遮光｜安静灰绿", image: "", video: "" },
+    { title: "阳台｜弯轨安装｜清爽白纱", image: "", video: "" },
+    { title: "儿童房｜柔和色系｜易打理", image: "", video: "" },
+    { title: "全屋｜统一配色｜上门报价", image: "", video: "" },
   ],
   prices: [
     {
@@ -155,9 +155,10 @@ export function normalizeSiteData(input = {}) {
       title: asString(item.title, fallback.title, 40),
       description: asString(item.description, fallback.description, 160),
     })),
-    cases: list(data.cases, base.cases, 12, (item, fallback) => ({
+    cases: list(data.cases, base.cases, 60, (item, fallback) => ({
       title: asString(item.title, fallback.title, 80),
       image: asUrl(item.image, fallback.image),
+      video: asUrl(item.video, fallback.video),
     })),
     prices: list(data.prices, base.prices, 6, (item, fallback) => ({
       tag: asString(item.tag, fallback.tag, 30),

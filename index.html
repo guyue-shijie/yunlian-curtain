@@ -402,6 +402,34 @@
       content: attr(data-title);
     }
 
+    .case video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+      background: #17231d;
+    }
+
+    .case.has-video::after {
+      z-index: 2;
+    }
+
+    .case-video-link {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 3;
+      padding: 8px 10px;
+      border-radius: 8px;
+      color: #fff;
+      background: rgba(31, 42, 36, .82);
+      font-size: 13px;
+      font-weight: 900;
+      text-decoration: none;
+    }
+
     .case:nth-child(2)::before {
       background:
         linear-gradient(145deg, rgba(185, 99, 95, .18), rgba(255, 255, 255, .15)),
