@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>打开门店导航｜一帘温馨窗帘软装生活馆</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --green: #1f6f4a;
+      --ink: #10231c;
+      --muted: #63756c;
+      --line: #d9e2dc;
+      --paper: #fffdfa;
+      --soft: #f5f2eb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: var(--soft);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+      line-height: 1.6;
+    }
+
+    main {
+      width: min(92vw, 520px);
+      padding: 28px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 20px 50px rgb(34 56 44 / 12%);
+    }
+
+    .mark {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      margin-bottom: 18px;
+      background: var(--green);
+      color: #fff;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(26px, 8vw, 36px);
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .address {
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin: 18px 0;
+      color: var(--ink);
+      background: #fff;
+      font-weight: 700;
+    }
+
+    .actions {
+      display: grid;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    a,
+    button {
+      width: 100%;
+      min-height: 48px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 16px;
+      font: inherit;
+      font-weight: 800;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .primary {
+      border-color: var(--green);
+      background: var(--green);
+      color: #fff;
+    }
+
+    .secondary {
+      background: #fff;
+      color: var(--ink);
+    }
+
+    .hint {
+      margin-top: 18px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="mark">帘</div>
+    <h1>打开门店导航</h1>
+    <p>目的地已设置好。如果没有自动调起高德地图，请点下面的按钮。</p>
+    <div class="address">一帘温馨窗帘软装生活馆<br />坐标：115.40834, 32.44126</div>
+    <div class="actions">
+      <a class="primary" id="openApp" href="#">打开高德地图 App</a>
+      <a class="secondary" id="openWeb" href="https://uri.amap.com/route?dlon=115.40834&dlat=32.44126&dname=%E4%B8%80%E5%B8%98%E6%B8%A9%E9%A6%A8%E7%AA%97%E5%B8%98%E8%BD%AF%E8%A3%85%E7%94%9F%E6%B4%BB%E9%A6%86&t=0&callnative=1">打开网页路线</a>
+      <button class="secondary" id="copyAddress" type="button">复制门店名称</button>
+    </div>
+    <p class="hint">微信、抖音、QQ 浏览器有时会拦截跳转。没有反应时，用 Safari 或手机自带浏览器打开本页再点。</p>
+  </main>
+
+  <script>
+    (function () {
+      const lon = "115.40834";
+      const lat = "32.44126";
+      const name = "一帘温馨窗帘软装生活馆";
+      const encodedName = encodeURIComponent(name);
+      const ua = navigator.userAgent || "";
+      const isIos = /iPhone|iPad|iPod/i.test(ua);
+      const isAndroid = /Android/i.test(ua);
+      const iosUrl = `iosamap://path?sourceApplication=yunlian-curtain&dlat=${lat}&dlon=${lon}&dname=${encodedName}&dev=0&t=0`;
+      const androidUrl = `amapuri://route/plan/?sourceApplication=yunlian-curtain&dlat=${lat}&dlon=${lon}&dname=${encodedName}&dev=0&t=0`;
+      const appUrl = isIos ? iosUrl : androidUrl;
+      const openApp = document.getElementById("openApp");
+      const copyAddress = document.getElementById("copyAddress");
+
+      openApp.href = appUrl;
+      openApp.addEventListener("click", function (event) {
+        if (!isIos && !isAndroid) return;
+        event.preventDefault();
+        window.location.href = appUrl;
+      });
+
+      copyAddress.addEventListener("click", async function () {
+        try {
+          await navigator.clipboard.writeText(name);
+          copyAddress.textContent = "已复制";
+        } catch {
+          copyAddress.textContent = name;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

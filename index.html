@@ -971,6 +971,14 @@
       <span>地址：请替换为真实门店地址</span>
     </div>
   </footer>
-  <script src="assets/site-renderer.js" defer></script>
+  <script src="assets/site-renderer.js?v=20260707-nav3" defer></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", function () {
+      document.querySelectorAll(".cta-panel .button.secondary").forEach(function (link) {
+        link.href = "/nav.html";
+        link.target = "_blank";
+      });
+    });
+  </script>
 </body>
 </html>
