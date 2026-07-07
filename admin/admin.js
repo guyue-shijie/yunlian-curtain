@@ -17,6 +17,39 @@ let siteData = null;
 let activeTab = "business";
 let isDirty = false;
 
+function looksMojibake(value) {
+  if (typeof value !== "string") return false;
+  if (/[ÃÂ]/.test(value)) return true;
+  const latin1Count = (value.match(/[\u00c0-\u00ff]/g) || []).length;
+  const cjkCount = (value.match(/[\u4e00-\u9fff]/g) || []).length;
+  return latin1Count >= 2 && cjkCount === 0;
+}
+
+function decodeLatin1Utf8(value) {
+  const bytes = Uint8Array.from(Array.from(value, (char) => char.charCodeAt(0) & 0xff));
+  return new TextDecoder("utf-8").decode(bytes);
+}
+
+function repairText(value) {
+  if (typeof value !== "string") return value;
+  let next = value;
+  for (let index = 0; index < 4 && looksMojibake(next); index += 1) {
+    const decoded = decodeLatin1Utf8(next);
+    if (!decoded || decoded === next) break;
+    next = decoded;
+  }
+  return next;
+}
+
+function repairMojibake(value) {
+  if (typeof value === "string") return repairText(value);
+  if (Array.isArray(value)) return value.map((item) => repairMojibake(item));
+  if (value && typeof value === "object") {
+    return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, repairMojibake(item)]));
+  }
+  return value;
+}
+
 function setStatus(message, type = "normal") {
   [$("#saveStatus"), $("#footerSaveStatus")].forEach((node) => {
     if (!node) return;
@@ -409,7 +442,7 @@ async function loadAdminData() {
   setStatus("正在读取后台内容...");
   try {
     const payload = await api("/api/admin/site");
-    siteData = payload.data;
+    siteData = repairMojibake(payload.data);
     isDirty = false;
     renderEditor();
     showApp();
@@ -453,11 +486,12 @@ async function save(event) {
   setBusy(true);
   setStatus("正在保存...");
   try {
+    siteData = repairMojibake(siteData);
     const payload = await api("/api/admin/site", {
       method: "PUT",
       body: JSON.stringify({ data: siteData }),
     });
-    siteData = payload.data;
+    siteData = repairMojibake(payload.data);
     isDirty = false;
     renderEditor();
     setStatus("已保存发布。前台最多 1 分钟内更新。");
