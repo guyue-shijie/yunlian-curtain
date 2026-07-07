@@ -36,6 +36,88 @@
     }
   }
 
+  function mapTargets(mapUrl) {
+    const fallback = String(mapUrl || "");
+    let lon = "115.40834";
+    let lat = "32.44126";
+    let name = "一帘温馨窗帘软装生活馆";
+
+    try {
+      const parsed = new URL(fallback, window.location.origin);
+      const dlon = parsed.searchParams.get("dlon");
+      const dlat = parsed.searchParams.get("dlat");
+      const dname = parsed.searchParams.get("dname");
+      const to = parsed.searchParams.get("to");
+      const position = parsed.searchParams.get("position");
+
+      if (dlon && dlat) {
+        lon = dlon;
+        lat = dlat;
+        if (dname) name = dname;
+      } else if (to) {
+        const parts = to.split(",");
+        if (parts.length >= 2) {
+          lon = parts[0];
+          lat = parts[1];
+          if (parts[2]) name = parts.slice(2).join(",");
+        }
+      } else if (position) {
+        const parts = position.split(",");
+        if (parts.length >= 2) {
+          lon = parts[0];
+          lat = parts[1];
+        }
+      }
+    } catch {
+      // Keep the known store destination when the saved value is not a URL.
+    }
+
+    const encodedName = encodeURIComponent(name);
+    const webUrl =
+      fallback ||
+      `https://uri.amap.com/navigation?to=${lon},${lat},${encodedName}&mode=car&policy=1&coordinate=gaode&callnative=1`;
+    return {
+      webUrl,
+      iosUrl: `iosamap://path?sourceApplication=yunlian-curtain&dlat=${lat}&dlon=${lon}&dname=${encodedName}&dev=0&t=0`,
+      androidUrl: `amapuri://route/plan/?sourceApplication=yunlian-curtain&dlat=${lat}&dlon=${lon}&dname=${encodedName}&dev=0&t=0`,
+    };
+  }
+
+  function setupMapLink(link, mapUrl) {
+    if (!link || !mapUrl) return;
+    const targets = mapTargets(mapUrl);
+    const ua = navigator.userAgent || "";
+    const isIos = /iPhone|iPad|iPod/i.test(ua);
+    const isAndroid = /Android/i.test(ua);
+    const appUrl = isIos ? targets.iosUrl : isAndroid ? targets.androidUrl : "";
+
+    link.href = appUrl || targets.webUrl;
+    link.target = appUrl ? "_self" : "_blank";
+
+    if (!appUrl) return;
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      let fallbackTimer = window.setTimeout(() => {
+        if (!document.hidden) window.location.href = targets.webUrl;
+      }, 1600);
+
+      const clearFallback = () => {
+        window.clearTimeout(fallbackTimer);
+        fallbackTimer = 0;
+      };
+      window.addEventListener("pagehide", clearFallback, { once: true });
+      document.addEventListener(
+        "visibilitychange",
+        () => {
+          if (document.hidden) clearFallback();
+        },
+        { once: true },
+      );
+
+      window.location.href = appUrl;
+    });
+  }
+
   function setPhoneLinks(data) {
     const number = data.business.phoneNumber || "";
     const label = data.business.phoneLabel || number;
@@ -212,7 +294,7 @@
     setText($(".cta-panel p"), data.content.ctaText);
 
     const mapLink = $('.cta-panel a[target="_blank"]');
-    if (mapLink && data.business.mapUrl) mapLink.href = data.business.mapUrl;
+    setupMapLink(mapLink, data.business.mapUrl);
 
     const boxes = $$(".lead-box .input-like");
     setText(boxes[0], `微信号：${data.business.wechat}`);
