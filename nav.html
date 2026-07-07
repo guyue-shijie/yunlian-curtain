@@ -9,6 +9,7 @@
     :root {
       color-scheme: light;
       --green: #1f6f4a;
+      --blue: #2563eb;
       --ink: #10231c;
       --muted: #63756c;
       --line: #d9e2dc;
@@ -32,7 +33,7 @@
     }
 
     main {
-      width: min(92vw, 520px);
+      width: min(92vw, 540px);
       padding: 28px;
       background: var(--paper);
       border: 1px solid var(--line);
@@ -103,6 +104,12 @@
       color: #fff;
     }
 
+    .baidu {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: #fff;
+    }
+
     .secondary {
       background: #fff;
       color: var(--ink);
@@ -118,44 +125,66 @@
   <main>
     <div class="mark">帘</div>
     <h1>打开门店导航</h1>
-    <p>目的地已设置好。如果没有自动调起高德地图，请点下面的按钮。</p>
-    <div class="address">一帘温馨窗帘软装生活馆<br />坐标：115.40834, 32.44126</div>
+    <p>目的地已设置好。优先用高德，也可以用百度地图。</p>
+    <div class="address">
+      一帘温馨窗帘软装生活馆（淮滨县正义街店）<br />
+      河南省信阳市淮滨县正义街288号（水利局西侧）<br />
+      高德坐标：115.412650, 32.460211
+    </div>
     <div class="actions">
-      <a class="primary" id="openApp" href="#">打开高德地图 App</a>
-      <a class="secondary" id="openWeb" href="https://uri.amap.com/route?dlon=115.40834&dlat=32.44126&dname=%E4%B8%80%E5%B8%98%E6%B8%A9%E9%A6%A8%E7%AA%97%E5%B8%98%E8%BD%AF%E8%A3%85%E7%94%9F%E6%B4%BB%E9%A6%86&t=0&callnative=1">打开网页路线</a>
+      <a class="primary" id="openAmapApp" href="#">打开高德地图 App</a>
+      <a class="baidu" id="openBaiduApp" href="#">打开百度地图 App</a>
+      <a class="secondary" id="openAmapWeb" href="#">高德网页路线</a>
+      <a class="secondary" id="openBaiduWeb" href="#">百度网页路线</a>
       <button class="secondary" id="copyAddress" type="button">复制门店名称</button>
     </div>
-    <p class="hint">微信、抖音、QQ 浏览器有时会拦截跳转。没有反应时，用 Safari 或手机自带浏览器打开本页再点。</p>
+    <p class="hint">微信、抖音、QQ 浏览器有时会拦截 App 跳转。没反应时，用 Safari 或手机自带浏览器打开本页再点。</p>
   </main>
 
   <script>
     (function () {
-      const lon = "115.40834";
-      const lat = "32.44126";
-      const name = "一帘温馨窗帘软装生活馆";
+      const lon = "115.412650";
+      const lat = "32.460211";
+      const name = "一帘温馨窗帘软装生活馆（淮滨县正义街店）";
+      const address = "河南省信阳市淮滨县正义街288号（水利局西侧）";
       const encodedName = encodeURIComponent(name);
+      const encodedAddress = encodeURIComponent(address);
+      const baiduDestination = encodeURIComponent(`latlng:${lat},${lon}|name:${name}`);
+
+      const urls = {
+        amapIos: `iosamap://path?sourceApplication=yunlian-curtain&dlat=${lat}&dlon=${lon}&dname=${encodedName}&dev=0&t=0`,
+        amapAndroid: `amapuri://route/plan/?sourceApplication=yunlian-curtain&dlat=${lat}&dlon=${lon}&dname=${encodedName}&dev=0&t=0`,
+        amapWeb: `https://uri.amap.com/route?dlon=${lon}&dlat=${lat}&dname=${encodedName}&t=0&callnative=1`,
+        baiduApp: `baidumap://map/navi?location=${lat},${lon}&query=${encodedName}&coord_type=gcj02&src=webapp.yunlian.curtain`,
+        baiduWeb: `https://api.map.baidu.com/direction?destination=${baiduDestination}&mode=driving&coord_type=gcj02&region=${encodeURIComponent("淮滨县")}&output=html&src=webapp.yunlian.curtain`,
+      };
+
       const ua = navigator.userAgent || "";
       const isIos = /iPhone|iPad|iPod/i.test(ua);
-      const isAndroid = /Android/i.test(ua);
-      const iosUrl = `iosamap://path?sourceApplication=yunlian-curtain&dlat=${lat}&dlon=${lon}&dname=${encodedName}&dev=0&t=0`;
-      const androidUrl = `amapuri://route/plan/?sourceApplication=yunlian-curtain&dlat=${lat}&dlon=${lon}&dname=${encodedName}&dev=0&t=0`;
-      const appUrl = isIos ? iosUrl : androidUrl;
-      const openApp = document.getElementById("openApp");
+      const amapApp = isIos ? urls.amapIos : urls.amapAndroid;
+
+      function wire(id, url) {
+        const link = document.getElementById(id);
+        if (!link) return;
+        link.href = url;
+        link.addEventListener("click", function (event) {
+          event.preventDefault();
+          window.location.href = url;
+        });
+      }
+
+      wire("openAmapApp", amapApp);
+      wire("openBaiduApp", urls.baiduApp);
+      wire("openAmapWeb", urls.amapWeb);
+      wire("openBaiduWeb", urls.baiduWeb);
+
       const copyAddress = document.getElementById("copyAddress");
-
-      openApp.href = appUrl;
-      openApp.addEventListener("click", function (event) {
-        if (!isIos && !isAndroid) return;
-        event.preventDefault();
-        window.location.href = appUrl;
-      });
-
       copyAddress.addEventListener("click", async function () {
         try {
-          await navigator.clipboard.writeText(name);
+          await navigator.clipboard.writeText(`${name} ${address}`);
           copyAddress.textContent = "已复制";
         } catch {
-          copyAddress.textContent = name;
+          copyAddress.textContent = `${name} ${address}`;
         }
       });
     })();

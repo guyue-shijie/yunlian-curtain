@@ -38,9 +38,9 @@
 
   function mapTargets(mapUrl) {
     const fallback = String(mapUrl || "");
-    let lon = "115.40834";
-    let lat = "32.44126";
-    let name = "一帘温馨窗帘软装生活馆";
+    let lon = "115.412650";
+    let lat = "32.460211";
+    let name = "一帘温馨窗帘软装生活馆（淮滨县正义街店）";
 
     try {
       const parsed = new URL(fallback, window.location.origin);
